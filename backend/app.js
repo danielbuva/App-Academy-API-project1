@@ -9,12 +9,16 @@ const { environment } = require("./config");
 const isProduction = environment === "production";
 const app = express();
 const routes = require("./routes");
+const {
+  notFoundHandler,
+  sqlValidationHandler,
+  errorFormatter,
+} = require("./services/error.server.js");
 
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 app.use(routes);
-
 if (!isProduction) {
   app.use(cors());
 }
@@ -32,5 +36,13 @@ app.use(
     },
   })
 );
+
+app.get("/", (req, res) => {
+  res.json("ola mundo");
+});
+
+app.use(notFoundHandler);
+app.use(sqlValidationHandler);
+app.use(errorFormatter);
 
 module.exports = app;
