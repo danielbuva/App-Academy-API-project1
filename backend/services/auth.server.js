@@ -2,14 +2,10 @@ const jwt = require("jsonwebtoken");
 const { jwtConfig, isProduction } = require("../config");
 const { User } = require("../db/models");
 const { secret, expiresIn } = jwtConfig;
+const { hashSync, compareSync } = require("bcryptjs");
+const { check } = require("express-validator");
 
-const setTokenCookie = (res, data) => {
-  const user = {
-    id: data.id,
-    email: data.email,
-    username: data.username,
-  };
-
+const setTokenCookie = (res, user) => {
   const token = jwt.sign(
     { data: user },
     secret,
@@ -71,9 +67,62 @@ const restoreCsrf = (req, res) => {
   });
 };
 
+const signup = async (req, res) => {
+  const { email, password, username } = req.body;
+  const hashedPassword = hashSync(password);
+  const data = await User.create({ email, username, hashedPassword });
+
+  const user = {
+    id: data.id,
+    email: data.email,
+    username: data.username,
+  };
+
+  setTokenCookie(res, user);
+
+  return res.json({ user });
+};
+
+const login = async (req, res, next) => {
+  const { credential, password } = req.body;
+
+  const data = await User.unscoped().findOne({
+    where: {
+      [Op.or]: {
+        username: credential,
+        email: credential,
+      },
+    },
+  });
+
+  const passwordMatch = compareSync(
+    password,
+    data.hashedPassword.toString()
+  );
+
+  if (!data || !passwordMatch) {
+    const err = new Error("Login failed");
+    err.status = 401;
+    err.title = "Login failed";
+    err.errors = { credential: "The provided credentials were invalid." };
+    return next(err);
+  }
+
+  const user = {
+    id: data.id,
+    email: data.email,
+    username: data.username,
+  };
+
+  setTokenCookie(res, user);
+
+  return res.json({ user });
+};
+
 module.exports = {
-  setTokenCookie,
   restoreSession,
   verifyAuth,
   restoreCsrf,
+  signup,
+  login,
 };

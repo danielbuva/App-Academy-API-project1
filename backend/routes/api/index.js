@@ -17,6 +17,8 @@ router.use("/users", usersRouter);
 
 router.get("/require-auth", verifyAuth, returnUser);
 
+router.get("/csrf/restore", restoreCsrf);
+
 router.post("/test", function (req, res) {
   res.json({ requestBody: req.body });
 });
