@@ -1,6 +1,6 @@
 const { ValidationError } = require("sequelize");
 
-const isProduction = require("../config").environment === "production";
+const { isProduction } = require("../config");
 
 const notFoundHandler = (_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
