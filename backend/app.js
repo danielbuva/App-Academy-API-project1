@@ -1,16 +1,16 @@
-const express = require("express");
-require("express-async-errors");
-const morgan = require("morgan");
-const cors = require("cors");
-const csurf = require("csurf");
-const helmet = require("helmet");
-const cookieParser = require("cookie-parser");
-const { isProduction } = require("./config");
 const {
   notFoundHandler,
   sqlValidationHandler,
   errorFormatter,
 } = require("./services/error.server.js");
+const cookieParser = require("cookie-parser");
+const { isProduction } = require("./config");
+const express = require("express");
+const morgan = require("morgan");
+const helmet = require("helmet");
+require("express-async-errors");
+const csurf = require("csurf");
+const cors = require("cors");
 const routes = require("./routes");
 
 const app = express();
