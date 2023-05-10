@@ -1,9 +1,10 @@
 const {
-  setTokenCookie,
   restoreCsrf,
   restoreSession,
   verifyAuth,
 } = require("../../services/auth.server");
+const sessionRouter = require("./session.js");
+const usersRouter = require("./users.js");
 const router = require("express").Router();
 
 const returnUser = (req, res) => {
@@ -11,9 +12,9 @@ const returnUser = (req, res) => {
 };
 
 router.use(restoreSession);
+router.use("/session", sessionRouter);
+router.use("/users", usersRouter);
 
-router.get("/csrf/restore", restoreCsrf);
-router.get("/set-token-cookie", setTokenCookie);
 router.get("/require-auth", verifyAuth, returnUser);
 
 router.post("/test", function (req, res) {

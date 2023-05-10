@@ -3,13 +3,7 @@ const { jwtConfig, isProduction } = require("../config");
 const { User } = require("../db/models");
 const { secret, expiresIn } = jwtConfig;
 
-const setTokenCookie = async (_, res) => {
-  const data = await User.findOne({
-    where: {
-      username: "Demo-lition",
-    },
-  });
-
+const setTokenCookie = (res, data) => {
   const user = {
     id: data.id,
     email: data.email,
@@ -29,7 +23,7 @@ const setTokenCookie = async (_, res) => {
     sameSite: "lax",
   });
 
-  return res.json({ user });
+  return token;
 };
 
 const restoreSession = (req, res, next) => {
@@ -59,7 +53,7 @@ const restoreSession = (req, res, next) => {
   });
 };
 
-const verifyAuth = (req, _res, next) => {
+const verifyAuth = (req, _, next) => {
   if (req.user) return next();
 
   const err = new Error("Authentication required");

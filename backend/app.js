@@ -19,14 +19,17 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 app.use(routes);
+
 if (!isProduction) {
   app.use(cors());
 }
+
 app.use(
   helmet.crossOriginResourcePolicy({
     policy: "cross-origin",
   })
 );
+
 app.use(
   csurf({
     cookie: {
@@ -36,6 +39,7 @@ app.use(
     },
   })
 );
+
 app.get("/", (_, res) => {
   res.json("ola mundo");
 });
