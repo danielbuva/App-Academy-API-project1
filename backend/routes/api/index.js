@@ -6,6 +6,7 @@ const {
 const sessionRouter = require("./session.js");
 const usersRouter = require("./users.js");
 const groupsRouter = require("./groups.js");
+const venuesRouter = require("./venues.js");
 const router = require("express").Router();
 
 const returnUser = (req, res) => {
@@ -16,6 +17,7 @@ router.use(restoreSession);
 router.use("/session", sessionRouter);
 router.use("/users", usersRouter);
 router.use("/groups", groupsRouter);
+router.use("/venues", venuesRouter);
 
 router.get("/require-auth", verifyAuth, returnUser);
 

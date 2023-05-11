@@ -1,6 +1,6 @@
 const { Membership } = require("../db/models");
 
-const userPerms = async (req) => {
+const userPerms = async (req, _, next) => {
   const { user } = req;
   const { groupId } = req.params;
 
@@ -15,14 +15,14 @@ const userPerms = async (req) => {
       where: { userId: user.id, groupId, status: "co-host" },
     })
   );
+
   if (isHost) {
     user.status = "host";
-    return 1;
   }
   if (isCoHost) {
     user.status = "co-host";
-    return 0;
   }
+  next();
 };
 
 module.exports = { userPerms };
