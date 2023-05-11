@@ -33,4 +33,15 @@ const errorFormatter = (err, _req, res, _next) => {
   });
 };
 
-module.exports = { notFoundHandler, sqlValidationHandler, errorFormatter };
+const invariant = (condition, message, next) => {
+  if (!condition) {
+    next({ status: 404, title: "Resource Not Found", message });
+  }
+};
+
+module.exports = {
+  notFoundHandler,
+  sqlValidationHandler,
+  errorFormatter,
+  invariant,
+};
