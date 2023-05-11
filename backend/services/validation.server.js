@@ -1,4 +1,6 @@
 const { validationResult } = require("express-validator");
+const { Event, Membership } = require("../db/models");
+const { invariant } = require("./error.server");
 
 const handleValidationErrors = (req, _res, next) => {
   const validationErrors = validationResult(req);
@@ -136,6 +138,28 @@ const validateRole = async (req, _, next) => {
   next();
 };
 
+const validateEventRole = async (req, _, next) => {
+  const userId = req.user.id;
+  const { eventId } = req.params;
+
+  const event = await Event.findByPk(eventId);
+  invariant(event, "Event couldn't be found", next);
+
+  req.event = event;
+
+  const role = await Membership.findOne({
+    attribute: ["status"],
+    where: { userId, groupId: event.groupId },
+  });
+
+  const hasValidRole =
+    role.status === "co-host" || role.status === "organizer";
+
+  invariant(hasValidRole, "Event couldn't be found", next);
+
+  next();
+};
+
 const getLeadershipRole = async (req, next) => {
   const userId = req.user.id;
   const { groupId } = req.params;
@@ -159,5 +183,6 @@ module.exports = {
   validateGroup,
   validateVenue,
   validateEvent,
+  validateEventRole,
   validateRole,
 };
