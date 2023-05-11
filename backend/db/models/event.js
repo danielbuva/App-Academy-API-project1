@@ -1,31 +1,38 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Event.hasMany(models.EventImage, {
+        foreignKey: "eventId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
+      Event.hasMany(models.User, {
+        through: models.Attendance,
+        foreignKey: "eventId",
+        otherKey: "userId",
+      });
+      Event.belongsTo(models.Venue);
+      Event.belongsTo(models.Group);
     }
   }
-  Event.init({
-    venueId: DataTypes.INTEGER,
-    groupId: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    type: DataTypes.ENUM,
-    capacity: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
-    startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'Event',
-  });
+  Event.init(
+    {
+      venueId: { type: DataTypes.INTEGER, allowNull: false },
+      groupId: { type: DataTypes.INTEGER, allowNull: false },
+      name: { type: DataTypes.STRING, allowNull: false },
+      description: { type: DataTypes.STRING, allowNull: false },
+      type: { type: DataTypes.ENUM, allowNull: false },
+      capacity: { type: DataTypes.INTEGER, allowNull: false },
+      price: { type: DataTypes.INTEGER, allowNull: false },
+      startDate: { type: DataTypes.DATE, allowNull: false },
+      endDate: { type: DataTypes.DATE, allowNull: false },
+    },
+    {
+      sequelize,
+      modelName: "Event",
+    }
+  );
   return Event;
 };
