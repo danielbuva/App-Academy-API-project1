@@ -23,7 +23,12 @@ module.exports = (sequelize, DataTypes) => {
       groupId: { type: DataTypes.INTEGER, allowNull: false },
       name: { type: DataTypes.STRING, allowNull: false },
       description: { type: DataTypes.STRING, allowNull: false },
-      type: { type: DataTypes.ENUM, allowNull: false },
+      type: {
+        type: DataTypes.ENUM,
+        allowNull: false,
+        values: ["Online", "In person"],
+        defaultValue: "In person",
+      },
       capacity: { type: DataTypes.INTEGER, allowNull: false },
       price: { type: DataTypes.INTEGER, allowNull: false },
       startDate: { type: DataTypes.DATE, allowNull: false },

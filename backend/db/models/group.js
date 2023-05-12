@@ -28,7 +28,12 @@ module.exports = (sequelize, DataTypes) => {
       about: { type: DataTypes.STRING, allowNull: false },
       name: { type: DataTypes.STRING, allowNull: false },
       private: { type: DataTypes.BOOLEAN, allowNull: false },
-      type: { type: DataTypes.ENUM, allowNull: false },
+      type: {
+        type: DataTypes.ENUM,
+        allowNull: false,
+        values: ["In person", "Online"],
+        defaultValue: "In person",
+      },
       city: { type: DataTypes.STRING, allowNull: false },
       state: { type: DataTypes.STRING, allowNull: false },
     },
