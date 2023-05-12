@@ -1,8 +1,8 @@
 {
-  "name": "authenticateme",
+  "name": "link-up",
   "version": "1.0.0",
-  "description": "## Database Schema Design",
-  "main": "index.js",
+  "description": "meet up project",
+  "main": "",
   "scripts": {
     "install": "npm --prefix backend install backend",
     "dev:backend": "npm install --prefix backend start",
@@ -11,7 +11,10 @@
     "start": "npm start --prefix backend",
     "build": "npm run --prefix backend build"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "link up",
+    "meet up"
+  ],
+  "author": "dani",
   "license": "ISC"
 }
