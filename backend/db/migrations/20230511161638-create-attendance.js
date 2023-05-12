@@ -1,7 +1,8 @@
 "use strict";
+require("dotenv").config();
 
 let options = {};
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production" && process.env.SCHEMA) {
   options.schema = process.env.SCHEMA;
 }
 
@@ -19,15 +20,11 @@ module.exports = {
         },
         eventId: {
           type: Sequelize.INTEGER,
-          references: { model: "Events", key: "id" },
           allowNull: false,
-          onDelete: "cascade",
         },
         userId: {
           type: Sequelize.INTEGER,
-          references: { model: "Users", key: "id" },
           allowNull: false,
-          onDelete: "cascade",
         },
         status: {
           allowNull: false,

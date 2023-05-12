@@ -1,7 +1,8 @@
 "use strict";
+require("dotenv").config();
 
 let options = {};
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production" && process.env.SCHEMA) {
   options.schema = process.env.SCHEMA;
 }
 
@@ -9,7 +10,7 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "EventImages",
+      "Venues",
       {
         id: {
           allowNull: false,
@@ -17,20 +18,29 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        eventId: {
+        groupId: {
           type: Sequelize.INTEGER,
-          references: { model: "Events", key: "id" },
           allowNull: false,
-          onDelete: "cascade",
         },
-        url: {
+        address: {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        preview: {
-          type: Sequelize.BOOLEAN,
+        city: {
+          type: Sequelize.STRING,
           allowNull: false,
-          defaultValue: false,
+        },
+        state: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        lat: {
+          allowNull: false,
+          type: Sequelize.FLOAT,
+        },
+        lng: {
+          allowNull: false,
+          type: Sequelize.FLOAT,
         },
         createdAt: {
           allowNull: false,
@@ -47,7 +57,7 @@ module.exports = {
     );
   },
   async down(queryInterface) {
-    options.tableName = "EventImages";
+    options.tableName = "Venues";
     await queryInterface.dropTable(options);
   },
 };
