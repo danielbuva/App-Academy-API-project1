@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         otherKey: "eventId",
       });
-      User.hasMany(models.Groups, { foreignKey: "organizerId" });
+      User.hasMany(models.Group, { foreignKey: "organizerId" });
     }
   }
 
