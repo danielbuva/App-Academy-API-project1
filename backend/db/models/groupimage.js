@@ -1,12 +1,12 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class GroupImages extends Model {
+  class GroupImage extends Model {
     static associate(models) {
-      GroupImages.belongsTo(models.Group, { foreignKey: "groupId" });
+      GroupImage.belongsTo(models.Group, { foreignKey: "groupId" });
     }
   }
-  GroupImages.init(
+  GroupImage.init(
     {
       groupId: { type: DataTypes.INTEGER, allowNull: false },
       url: { type: DataTypes.STRING, allowNull: false },
@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "GroupImages",
+      modelName: "GroupImage",
     }
   );
-  return GroupImages;
+  return GroupImage;
 };
