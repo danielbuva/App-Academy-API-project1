@@ -11,6 +11,9 @@ const {
   validateVenue,
   validateEventRole,
 } = require("../../services/validation.server");
+const attendeesRouter = require("./attendees.js");
+
+router.use("/:eventId", attendeesRouter);
 
 router.get("/", async (req, res) => {
   const events = await Event.findAll({});

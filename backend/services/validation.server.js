@@ -130,8 +130,7 @@ const validateRole = async (req, _, next) => {
     where: { userId, groupId },
   });
 
-  const hasValidRole =
-    role.status === "co-host" || role.status === "organizer";
+  const hasValidRole = role.status === "co-host" || role.status === "host";
 
   invariant(hasValidRole, "Group couldn't be found", next);
 
@@ -139,23 +138,52 @@ const validateRole = async (req, _, next) => {
 };
 
 const validateEventRole = async (req, _, next) => {
-  const userId = req.user.id;
-  const { eventId } = req.params;
-
-  const event = await Event.findByPk(eventId);
+  const event = await Event.findByPk(req.params.eventId);
   invariant(event, "Event couldn't be found", next);
 
   req.event = event;
 
   const role = await Membership.findOne({
     attribute: ["status"],
-    where: { userId, groupId: event.groupId },
+    where: { userId: req.user.id, groupId: event.groupId },
   });
 
-  const hasValidRole =
-    role.status === "co-host" || role.status === "organizer";
+  const hasValidRole = role.status === "co-host" || role.status === "host";
 
   invariant(hasValidRole, "Event couldn't be found", next);
+
+  req.user.status = hasValidRole ? role.status : null;
+
+  next();
+};
+
+const addHostStatus = async (req, _, next) => {
+  const event = await Event.findByPk(req.params.eventId);
+  invariant(event, "Event couldn't be found", next);
+
+  const role = await Membership.findOne({
+    attribute: ["status"],
+    where: { userId: req.user.id, groupId: event.groupId },
+  });
+
+  const hasValidRole = role.status === "co-host" || role.status === "host";
+
+  req.user.status = hasValidRole ? role.status : null;
+
+  next();
+};
+
+const addUserStatus = async (req, _, next) => {
+  const event = await Event.findByPk(req.params.eventId);
+  invariant(event, "Event couldn't be found", next);
+
+  const role = await Membership.findOne({
+    attribute: ["status"],
+    where: { userId: req.user.id, groupId: event.groupId },
+  });
+  invariant(role && role !== "pending", "Event couldn't be found");
+
+  req.user.status = role.status;
 
   next();
 };
@@ -169,8 +197,7 @@ const getLeadershipRole = async (req, next) => {
     where: { userId, groupId },
   });
 
-  const hasValidRole =
-    role.status === "co-host" || role.status === "organizer";
+  const hasValidRole = role.status === "co-host" || role.status === "host";
 
   invariant(hasValidRole, "Group couldn't be found", next);
 
@@ -178,6 +205,8 @@ const getLeadershipRole = async (req, next) => {
 };
 
 module.exports = {
+  addUserStatus,
+  addHostStatus,
   getLeadershipRole,
   handleValidationErrors,
   validateGroup,

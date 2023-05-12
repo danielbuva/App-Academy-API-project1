@@ -1,13 +1,13 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Attendances extends Model {
+  class Attendance extends Model {
     static associate(models) {
-      Attendances.belongsTo(models.Event);
-      Attendances.belongsTo(models.User);
+      Attendance.belongsTo(models.Event);
+      Attendance.belongsTo(models.User);
     }
   }
-  Attendances.init(
+  Attendance.init(
     {
       eventId: { type: DataTypes.INTEGER, allowNull: false },
       userId: { type: DataTypes.INTEGER, allowNull: false },
@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Attendances",
+      modelName: "Attendance",
     }
   );
-  return Attendances;
+  return Attendance;
 };
