@@ -47,7 +47,7 @@ module.exports = {
     );
   },
   async down(queryInterface) {
-    options.tableName = "EventImages"
+    options.tableName = "EventImages";
     await queryInterface.dropTable(options);
   },
 };
