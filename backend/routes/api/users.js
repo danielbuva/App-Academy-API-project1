@@ -1,4 +1,4 @@
-const { validateSignup } = require("../../services/validator.server");
+const { validateSignup } = require("../../services/validtors.server");
 const { signup } = require("../../services/auth.server");
 const router = require("express").Router();
 

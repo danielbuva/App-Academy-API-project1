@@ -1,3 +1,6 @@
+const { handleValidationErrors } = require("./validation.server");
+const { check } = require("express-validator");
+
 const validateLogin = [
   check("credential")
     .exists({ checkFalsy: true })
