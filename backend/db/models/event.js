@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         hooks: true,
       });
-      Event.hasMany(models.User, {
+      Event.belongsToMany(models.User, {
         through: models.Attendance,
         foreignKey: "eventId",
         otherKey: "userId",
