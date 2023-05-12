@@ -9,6 +9,7 @@ if (process.env.NODE_ENV === "production" && process.env.SCHEMA) {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
+    console.log({ schema });
     console.log("Started adding constraints...");
     await queryInterface.addConstraint("Venues", {
       type: "foreign key",
