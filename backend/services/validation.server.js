@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const { Event, Membership } = require("../db/models");
 const { invariant } = require("./error.server");
+const { Op } = require("sequelize");
 
 const handleValidationErrors = (req, _res, next) => {
   const validationErrors = validationResult(req);
@@ -204,6 +205,48 @@ const getLeadershipRole = async (req, next) => {
   return role.status;
 };
 
+const validateQuery = ({ page, size, name, type, startDate }) => {
+  let errorResult = { errors: {}, message: "Bad Request", status: 400 };
+  if ((page && page < 1) || page > 10) {
+    errorResult.errors.page = "Page must be greater than or equal to 1";
+  }
+  if ((size && size < 1) || size > 20) {
+    errorResult.errors.size = "Size must be greater than or equal to 1";
+  }
+  if (typeof name !== "string") {
+    errorResult.errors.name = "Name must be a string";
+  }
+  if (type !== "Online" || type !== "In Person") {
+    errorResult.errors.type = "Type must be 'Online' or 'In Person'";
+  }
+  if (startDate) {
+    errorResult.errors.startDate = "Start date must be a valid datetime";
+  }
+  if (Object.keys(errors).length > 0) {
+    next(errorResult);
+    return;
+  }
+
+  let options = { where: {} };
+
+  page = page ?? 1;
+  size = size ?? 20;
+  options.limit = size;
+  options.offset = (page - 1) * size;
+
+  if (name) {
+    options.where.name = { [Op.like]: `%${name}%` };
+  }
+  if (type) {
+    options.where.type = type;
+  }
+  if (startDate) {
+    options.where.startDate = startDate;
+  }
+
+  return options;
+};
+
 module.exports = {
   addUserStatus,
   addHostStatus,
@@ -214,4 +257,5 @@ module.exports = {
   validateEvent,
   validateEventRole,
   validateRole,
+  validateQuery,
 };

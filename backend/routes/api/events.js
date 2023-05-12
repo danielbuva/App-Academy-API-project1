@@ -10,13 +10,15 @@ const { invariant } = require("../../services/error.server");
 const {
   validateVenue,
   validateEventRole,
+  validateQuery,
 } = require("../../services/validation.server");
 const attendeesRouter = require("./attendees.js");
 
 router.use("/:eventId", attendeesRouter);
 
 router.get("/", async (req, res) => {
-  const events = await Event.findAll({});
+  const options = validateQuery(req.body);
+  const events = await Event.findAll(options);
   res.json(events);
 });
 
