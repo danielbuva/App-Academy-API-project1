@@ -17,6 +17,10 @@
     "sequelize-cli": "^6.6.0"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
+    "@types/csurf": "^1.11.2",
+    "@types/morgan": "^1.9.4",
     "dotenv-cli": "^7.2.1",
     "nodemon": "^2.0.22",
     "sqlite3": "^5.1.6"

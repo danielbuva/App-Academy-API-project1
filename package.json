@@ -16,5 +16,11 @@
     "meet up"
   ],
   "author": "dani",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
+    "@types/csurf": "^1.11.2",
+    "@types/morgan": "^1.9.4"
+  }
 }
